@@ -53,6 +53,7 @@ export default function Home() {
                width={560}
                height={620}
                className="block md:hidden"
+               alt="React Next Png Image"
               />
       </div>
 

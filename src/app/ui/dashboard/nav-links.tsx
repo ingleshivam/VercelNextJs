@@ -25,7 +25,7 @@ export default function NavLinks(){
                                 <li className={clsx(
                                     'p-4 text-center border border-white-500 text-white hover:bg-orange-500',
                                     {
-                                        'bg-sky-500 text-white-600' : pathname == link.href
+                                        'bg-sky-500 text-white  -600' : pathname == link.href
                                     },
                                     )}>{link.name}</li> 
                             </Link>
