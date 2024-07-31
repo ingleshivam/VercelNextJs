@@ -52,7 +52,7 @@ export default async function Page(){
                     <InvoiceDetailsComp/>
                 </Suspense>
 
-<div className="bg-black justify-center flex mt-8">
+<               div className="bg-black justify-center flex mt-8">
                     <table className="w-full bg-white text-center">
                         <thead className="bg-orange-500 text-white">
                             <tr>
