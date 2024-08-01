@@ -1,12 +1,12 @@
-'use client'
+// 'use client'
 
-import React from "react";
-import { Pagination } from "@nextui-org/react";
+// import React from "react";
+// import { Pagination } from "@nextui-org/react";
 
-export function Pagination(){
-    return(
-        <>
-            <Pagination total={10} initialPage={1}/>
-        </>
-    );
-}
+// export function Pagination(){
+//     return(
+//         <>
+//             <Pagination total={10} initialPage={1}/>
+//         </>
+//     );
+// }

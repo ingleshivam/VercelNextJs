@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./ui/globals.css";
+import {Providers} from "./Providers";
 import {inter} from "@/app/ui/fonts"
 
 export const metadata: Metadata = {
@@ -14,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <body className={`${inter.className} antialiase`}>{children}</body>
+        <body className={`${inter.className} antialiase`}>{children}
+          <Providers>
+            {children}
+          </Providers>
+        </body>
     </html>
   );
 }

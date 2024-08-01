@@ -32,8 +32,7 @@ export async function fetchInvoicesPages(query:string){
     const ITEMS_PER_PAGE =5;
     try{
         const count = await sql `
-        SELECT COUNT(*) FROM Employee
-        WHERE employeename ILIKE ${`%${query}%`} OR
+        SELECT * FROM employee where employeename ILIKE ${`%${query}%`} OR
         employeecity ILIKE ${`%${query}%`}
         ;`;
 

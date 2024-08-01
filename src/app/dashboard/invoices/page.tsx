@@ -3,6 +3,7 @@ import { InvoicesDetails } from "@/app/lib/data";
 import React, { Component, Suspense } from 'react';
 import TableSkeleton from  "@/app/ui/skeletons/tableskeleton";
 import InvoiceDetailsComp from "@/app/ui/dashboard/InvoiceDetails";
+import {Pagination, PaginationItem, PaginationCursor} from "@nextui-org/react";
 import Table from "./table";
 import { fetchInvoicesPages } from "@/app/lib/data";
 export default async function Page(
@@ -24,8 +25,9 @@ export default async function Page(
         <>
             <Suspense fallback={<TableSkeleton/>}>
                 <Table query={query} currentPage={currentpage}/>
+                
             </Suspense>
-            
+            <Pagination total={10} initialPage={1}/>
             {/* <div>
                 What is Lorem Ipsum?
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
