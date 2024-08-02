@@ -6,22 +6,47 @@ import { z } from "zod";
 import { UpdateInvoice } from "../components/updatedetails";
 
 const formSchema = z.object({
-  employeeid: z.string(),
-  employeename: z.string(),
-  employeecity: z.string(),
-  employeesalary: z.string(),
+  employeeid: z.string({
+    invalid_type_error:'Please enter employee id',
+  }),
+  employeename: z.string({
+    invalid_type_error:'Please enter employee name',
+}),
+  employeecity: z.string({
+    invalid_type_error:'please enter employee city',
+  }),
+  employeesalary: z.string({
+    invalid_type_error:'please enter employee salary',
+  }),
 });
+
+export type State = {
+  errors?:{
+    employeeid?:string[];
+    employeename?:string[];
+    employeecity?:string[];
+    employeesalary?:string[];
+  };
+  message?: string | null;
+}
 
 const createDetails = formSchema;
 
-export async function addEmployee(formdata: FormData) {
-  const { employeeid, employeename, employeecity, employeesalary } =
-    createDetails.parse({
+export default async function addEmployee(prevState:State,formdata: FormData) {
+  // const { employeeid, employeename, employeecity, employeesalary } =
+   const validated_fields =  createDetails.safeParse({
       employeeid: formdata.get("employeeid"),
       employeename: formdata.get("employeename"),
       employeecity: formdata.get("employeecity"),
       employeesalary: formdata.get("employeesalary"),
     });
+
+    if(!validated_fields.success){
+      return{
+        errors : validated_fields.error.flatten().fieldErrors,
+        message:'Missing Fields, Failed to add employee',
+      }
+    }
   
    // Without ZOD
   // const rawData = {
@@ -33,7 +58,15 @@ export async function addEmployee(formdata: FormData) {
 
   // console.log(rawData);
 
-  await sql`INSERT INTO employee (employeeid, employeename, employeecity, employeesalary) VALUES (${employeeid},${employeename},${employeecity},${employeesalary});`;
+  const { employeeid, employeename, employeecity, employeesalary } = validated_fields.data;
+
+  try{
+    await sql`INSERT INTO employee (employeeid, employeename, employeecity, employeesalary) VALUES (${employeeid},${employeename},${employeecity},${employeesalary});`;
+  }catch(error){
+    return{
+      message:'Database Error : Failed to Add Employee Details',
+    }
+  }
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
@@ -48,12 +81,28 @@ export async function updateEmployee(id: string, formData: FormData) {
       employeesalary: formData.get("employeesalary"),
     });
 
-  await sql`UPDATE employee SET employeeid = ${employeeid}, employeename = ${employeename}, employeecity = ${employeecity}, employeesalary = ${employeesalary} WHERE employeeid = ${employeeid};`;
+  try{
+    await sql `UPDATE employee SET employeeid = ${employeeid}, employeename = ${employeename}, employeecity = ${employeecity}, employeesalary = ${employeesalary} WHERE employeeid = ${employeeid};`;
+  }catch(error){
+    return{
+      message:'Database Error : Failed to Update Details',
+    };
+  }
+  
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
 
 export async function deleteEmployee(id:string){
-  await sql `DELETE FROM employee WHERE employeeid = ${id};`;
+  throw new Error('Failed to delte invoice  ');
+  try{
+    await sql `DELETE FROM employee WHERE employeeid = ${id};`;
+  }catch(error){
+    return{
+      message:'Database Error : Failed to Delete Details',
+    }
+  }
+  
   revalidatePath('/dashboard/invoices');
 }
+

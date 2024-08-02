@@ -23,32 +23,33 @@ export default function Form(
         <form action={updateDetailsWithID}>
             <div>
                 <label>Enter Employee ID</label>
-                <div>
-                    <input type="text" className="p-2 w-full" name="employeeid" defaultValue={invoice.employeeid}/>
+                <div className="mt-3">
+                    <input disabled  type="text" className="p-2 w-full" name="employeeid" defaultValue={invoice.employeeid}/>
                 </div>
             </div>
             
-            <div>
+            <div className="mt-3">
                 <label>Enter Employee Name</label>
-                <div>
+                <div className="mt-3">
                     <input type="text" className="p-2 w-full" name="employeename" defaultValue={invoice.employeename}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mt-3">
                 <label>Enter Employee City</label>
-                <div>
+                <div className="mt-3">
                     <input type="text" name="employeecity" className="p-2 w-full" defaultValue={invoice.employeecity}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mt-3">
                 <label>Enter Employee Salary</label>
-                <div>
+                <div className="mt-3">
                     <input type="text" className="p-2 w-full" name="employeesalary" defaultValue={invoice.employeesalary}/>
                 </div>
             </div>
-            <button type="submit" onClick={()=> alert("hello")} className="bg-orange-500 px-12 py-2 mt-2">Update</button>
+            <button type="submit" className="mt-5 bg-orange-500 px-12 py-2 mt-2 text-white">Update</button>
+            <button type="button" className="mt-5 bg-orange-500 px-12 py-2 mt-2 ms-3 text-white"><Link href={'/dashboard/invoices'}>Back</Link></button>
         </form>
     );
 }
