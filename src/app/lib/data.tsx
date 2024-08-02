@@ -2,8 +2,10 @@
 import { sql } from "@vercel/postgres"
 import { error } from "console";
 import { NextResponse } from "next/server";
+import Error from "../../../my-nextui-app/app/error";
 
 export async function InvoicesDetails(){
+    const ITEMS_PER_PAGE =5;
     await new Promise((resolve) => setTimeout(resolve, 5000));
     const result = await sql `SELECT * FROM Employee;`;
     return result.rows;
@@ -15,16 +17,20 @@ export async function AreaDetails(){
 }
 
 export async function fetchFilteredInvoices(query:string, currentPage:number,){
+    const ITEMS_PER_PAGE =5;
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
     try{
+        await new Promise((resolve)=> setTimeout(resolve,5000));
         const invoices = await sql `
             SELECT * FROM employee where employeename ILIKE ${`%${query}%`} OR
             employeecity ILIKE ${`%${query}%`}
-            ORDER BY employeename ASC
+            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
         ;`;
 
         return invoices.rows
     }catch(error){
-        return NextResponse.json({error},{status:500});
+        console.log("Error : ",error);
     }
 }
 

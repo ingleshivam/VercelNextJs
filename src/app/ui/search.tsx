@@ -13,6 +13,7 @@ const {replace} = useRouter();
   const handleSearch = useDebouncedCallback((term: string) => {
     console.log(`Seraching...${term}`);
     const params = new URLSearchParams(searchParams);
+    params.set('page','1');
     if(term){
         params.set('query', term);
     }else{
