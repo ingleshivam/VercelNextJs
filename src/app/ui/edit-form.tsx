@@ -2,16 +2,25 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useFormState } from "react-dom";
-import addEmployee from "../lib/action";
+import  { updateEmployee } from "../lib/action";
 import { InvoiceForm,customer } from "../lib/definitions";
 
-export default function Form({invoice,customers,}:{invoice:InvoiceForm;customers:customer[];}){
+export default function Form(
+    {
+        invoice,
+        customers,
+    }:
+    {
+        invoice:InvoiceForm,
+        customers:customer[];
+    }){
 
     // const initialstate = {message:null, errors:{}};
     // const [state,dispatch] = useFormState(addEmployee,initialstate);
+    const updateDetailsWithID = updateEmployee.bind(null, invoice.employeeid);
 
     return (
-        <form>
+        <form action={updateDetailsWithID}>
             <div>
                 <label>Enter Employee ID</label>
                 <div>

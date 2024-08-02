@@ -11,35 +11,38 @@ export default function Form({customers}:{customers:customer[]}){
     // const [state,dispatch] = useFormState(addEmployee,initialstate);
 
     return (
-        <form action={addEmployee}>
-            <div>
-                <label>Enter Employee ID</label>
+        <div className="">
+            <form action={addEmployee}>
                 <div>
-                    <input type="text" className="p-2 w-full" name="employeeid"/>
+                    <label>Enter Employee ID</label>
+                    <div>
+                        <input type="text" className="p-2 w-full mt-3" name="employeeid"/>
+                    </div>
                 </div>
-            </div>
-            
-            <div>
-                <label>Enter Employee Name</label>
-                <div>
-                    <input type="text" className="p-2 w-full" name="employeename"/>
+                
+                <div className="mt-3">
+                    <label>Enter Employee Name</label>
+                    <div>
+                        <input type="text" className="mt-3 p-2 w-full" name="employeename"/>
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label>Enter Employee City</label>
-                <div>
-                    <input type="text" name="employeecity" className="p-2 w-full"/>
+                <div className="mt-3">
+                    <label>Enter Employee City</label>
+                    <div>
+                        <input type="text" name="employeecity" className="mt-3 p-2 w-full"/>
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label>Enter Employee Salary</label>
-                <div>
-                    <input type="text" className="p-2 w-full" name="employeesalary"/>
+                <div className="mt-3">
+                    <label>Enter Employee Salary</label>
+                    <div>
+                        <input type="text" className="mt-3 p-2 w-full" name="employeesalary"/>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" onClick={()=> alert("hello")} className="bg-orange-500 px-12 py-2 mt-2">Send</button>
-        </form>
+                <button type="submit" onClick={()=> alert("hello")} className="text-white bg-orange-500 px-12 py-2 mt-5">Send</button>
+                <button type="button" className="bg-orange-500 px-12 py-2 mt-2 ms-4 text-white"><Link href={'/dashboard/invoices'}>BACK</Link></button>
+            </form>
+        </div>
     );
 }

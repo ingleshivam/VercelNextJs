@@ -6,8 +6,8 @@ import Error from "../../../my-nextui-app/app/error";
 
 export async function InvoicesDetails(){
     const ITEMS_PER_PAGE =5;
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    const result = await sql `SELECT * FROM Employee;`;
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
+    const result = await sql `SELECT * FROM Employee ORDER BY employeeid ASC;`;
     return result.rows;
 }
 
@@ -21,10 +21,11 @@ export async function fetchFilteredInvoices(query:string, currentPage:number,){
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
     try{
-        await new Promise((resolve)=> setTimeout(resolve,5000));
+        // await new Promise((resolve)=> setTimeout(resolve,5000));
         const invoices = await sql `
             SELECT * FROM employee where employeename ILIKE ${`%${query}%`} OR
             employeecity ILIKE ${`%${query}%`}
+            ORDER BY employeeid ASC
             LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
         ;`;
 
