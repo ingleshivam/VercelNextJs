@@ -2,6 +2,7 @@ import { fetchFilteredInvoices } from "@/app/lib/data";
 import Search from "@/app/ui/search";
 import { Pagination } from "@nextui-org/react";
 import React from "react";
+import { UpdateInvoice } from "@/app/components/updatedetails";
 export default async function InvoiceTable(
     {
         query, 
@@ -28,6 +29,7 @@ export default async function InvoiceTable(
                             <th className="py-3 px-2">Employee Name</th>
                             <th className="py-3 px-2">Employee City</th>
                             <th className="py-3 px-2">Employee Salary</th>
+                            <th className="py-3 px-2">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +40,7 @@ export default async function InvoiceTable(
                                 <td className="py-3 px-2">{data.employeename}</td>
                                 <td className="py-3 px-2">{data.employeecity}</td>
                                 <td className="py-3 px-2">{data.employeesalary}</td>
+                                <td><UpdateInvoice id={data.employeeid}/> | </td>
                             </tr>
                             )
                         }

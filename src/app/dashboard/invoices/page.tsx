@@ -1,5 +1,5 @@
 import AddRecordBtn from "@/app/components/AddRecordBtn";
-import { InvoicesDetails } from "@/app/lib/data";
+import { fetchInvoiceById, InvoicesDetails } from "@/app/lib/data";
 import React, { Component, Suspense } from 'react';
 import TableSkeleton from  "@/app/ui/skeletons/tableskeleton";
 import InvoiceDetailsComp from "@/app/ui/dashboard/InvoiceDetails";
@@ -22,12 +22,13 @@ export default async function Page(
     const currentpage = Number(searchParams?.page) || 1;
     const invoiceDetails = await InvoicesDetails();
     const totalPages = await fetchInvoicesPages(query);
+    const getdata = await fetchInvoiceById("1");
     return (
         <>
             <Suspense key={query+currentpage} fallback={<TableSkeleton/>}>
                 <Table query={query} currentPage={currentpage}/>
             </Suspense>
-            <Pagination totalPages={2}/>
+            <Pagination totalPages={totalPages}/>
         </>
     );
 }

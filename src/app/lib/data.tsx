@@ -49,4 +49,11 @@ export async function fetchInvoicesPages(query:string){
     }
 }
 
-// first-next-app\node_modules\@patternfly\react-core\dist\js\components\Pagination
+export async function fetchInvoiceById(id:string){
+    try{
+        const data = await sql `SELECT * FROM employee WHERE employeeid = ${id};`;
+        return data.rows[0];
+    }catch(error){
+        console.log(error);
+    }
+}
