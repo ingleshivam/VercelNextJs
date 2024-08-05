@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useFormState } from "react-dom";
 import  { updateEmployee } from "../lib/action";
 import { InvoiceForm,customer } from "../lib/definitions";
+import { State } from "../lib/action";
 
 export default function Form(
     {
@@ -17,14 +18,17 @@ export default function Form(
 
     // const initialstate = {message:null, errors:{}};
     // const [state,dispatch] = useFormState(addEmployee,initialstate);
+    const initialstate:State = {message:null, errors: {}};  
     const updateDetailsWithID = updateEmployee.bind(null, invoice.employeeid);
+    // const [state, dispatch] = useFormState(updateDetailsWithID, initialstate);
+    
 
     return (
         <form action={updateDetailsWithID}>
             <div>
                 <label>Enter Employee ID</label>
                 <div className="mt-3">
-                    <input disabled  type="text" className="p-2 w-full" name="employeeid" defaultValue={invoice.employeeid}/>
+                    <input readOnly  type="text" className="p-2 w-full" name="employeeid" defaultValue={invoice.employeeid}/>
                 </div>
             </div>
             

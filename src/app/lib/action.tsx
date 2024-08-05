@@ -4,22 +4,16 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { UpdateInvoice } from "../components/updatedetails";
+import { error } from "console";
+import { signIn } from "../auth";
 
 const formSchema = z.object({
-  employeeid: z.string({
-    invalid_type_error:'Please enter employee id',
-  }),
-  employeename: z.string({
-    invalid_type_error:'Please enter employee name',
-}),
-  employeecity: z.string({
-    invalid_type_error:'please enter employee city',
-  }),
-  employeesalary: z.string({
-    invalid_type_error:'please enter employee salary',
-  }),
+  employeeid: z.string().min(1),
+  employeename: z.string().min(1),
+  employeecity: z.string().min(1),
+  employeesalary: z.string().min(1),
 });
-
+const createDetails = formSchema;
 export type State = {
   errors?:{
     employeeid?:string[];
@@ -30,7 +24,7 @@ export type State = {
   message?: string | null;
 }
 
-const createDetails = formSchema;
+
 
 export default async function addEmployee(prevState:State,formdata: FormData) {
   // const { employeeid, employeename, employeecity, employeesalary } =
@@ -40,12 +34,12 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
       employeecity: formdata.get("employeecity"),
       employeesalary: formdata.get("employeesalary"),
     });
-
+    console.log(validated_fields);
     if(!validated_fields.success){
       return{
         errors : validated_fields.error.flatten().fieldErrors,
-        message:'Missing Fields, Failed to add employee',
-      }
+        message:'Missing Fields, Failed to add employee',        
+      };
     }
   
    // Without ZOD
@@ -57,7 +51,7 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
   // }
 
   // console.log(rawData);
-
+  
   const { employeeid, employeename, employeecity, employeesalary } = validated_fields.data;
 
   try{
@@ -73,8 +67,7 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
 
 const editDetails = formSchema;
 export async function updateEmployee(id: string, formData: FormData) {
-  const { employeeid, employeename, employeecity, employeesalary } =
-    editDetails.parse({
+    const {employeeid,employeename, employeecity, employeesalary} = editDetails.parse({
       employeeid: formData.get("employeeid"),
       employeename: formData.get("employeename"),
       employeecity: formData.get("employeecity"),
@@ -94,7 +87,7 @@ export async function updateEmployee(id: string, formData: FormData) {
 }
 
 export async function deleteEmployee(id:string){
-  throw new Error('Failed to delte invoice  ');
+  // throw new Error('Failed to delte invoice  ');
   try{
     await sql `DELETE FROM employee WHERE employeeid = ${id};`;
   }catch(error){
@@ -106,3 +99,17 @@ export async function deleteEmployee(id:string){
   revalidatePath('/dashboard/invoices');
 }
 
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', Object.fromEntries(formData));
+    // revalidatePath("/dashboard/invoices");
+  } catch (error) {
+    if ((error as Error).message.includes('CredentialsSignin')) {
+      return 'CredentialSignin';
+    }
+    throw error;
+  }
+}
