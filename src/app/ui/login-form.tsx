@@ -9,6 +9,7 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '../lib/action';
+import { useActionState } from 'react';
 
 export default function LoginForm() {
   const [code, action] = useFormState(authenticate, undefined);
@@ -24,14 +25,14 @@ export default function LoginForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="email"
             >
-              Employee Name
+              Email Address
             </label>
             <div className="relative">
               <input
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="email"
-                type="text"
-                name="employeename"
+                type="email"
+                name="email"
                 placeholder="Enter your email address"
                 required
               />
@@ -43,14 +44,14 @@ export default function LoginForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Employee City
+              Password
             </label>
             <div className="relative">
               <input
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="password"
-                type="text"
-                name="employeecity"
+                type="password"
+                name="password"
                 placeholder="Enter password"
                 required
               />
@@ -60,14 +61,14 @@ export default function LoginForm() {
         </div>
         <LoginButton />
         <div className="flex h-8 items-end space-x-1">
-          {code === 'CredentialSignin' && (
+          {/* {code === 'CredentialSignin' && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
               <p aria-live="polite" className="text-sm text-red-500">
                 Invalid credentials
               </p>
             </>
-          )}
+          )} */}
         </div>
       </div>
     </form>

@@ -6,12 +6,14 @@ import { z } from "zod";
 import { UpdateInvoice } from "../components/updatedetails";
 import { error } from "console";
 import { signIn } from "../auth";
+import { AuthError } from "next-auth";
 
 const formSchema = z.object({
   employeeid: z.string().min(1),
   employeename: z.string().min(1),
   employeecity: z.string().min(1),
   employeesalary: z.string().min(1),
+  email:z.string().min(1)
 });
 const createDetails = formSchema;
 export type State = {
@@ -20,6 +22,7 @@ export type State = {
     employeename?:string[];
     employeecity?:string[];
     employeesalary?:string[];
+    email?:string[];
   };
   message?: string | null;
 }
@@ -33,6 +36,7 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
       employeename: formdata.get("employeename"),
       employeecity: formdata.get("employeecity"),
       employeesalary: formdata.get("employeesalary"),
+      email: formdata.get("emailaddress")
     });
     console.log(validated_fields);
     if(!validated_fields.success){
@@ -52,10 +56,10 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
 
   // console.log(rawData);
   
-  const { employeeid, employeename, employeecity, employeesalary } = validated_fields.data;
+  const { employeeid, employeename, employeecity, employeesalary,email } = validated_fields.data;
 
   try{
-    await sql`INSERT INTO employee (employeeid, employeename, employeecity, employeesalary) VALUES (${employeeid},${employeename},${employeecity},${employeesalary});`;
+    await sql`INSERT INTO employee (employeeid, employeename, employeecity, employeesalary,emailaddress) VALUES (${employeeid},${employeename},${employeecity},${employeesalary},${email});`;
   }catch(error){
     return{
       message:'Database Error : Failed to Add Employee Details',
@@ -67,15 +71,16 @@ export default async function addEmployee(prevState:State,formdata: FormData) {
 
 const editDetails = formSchema;
 export async function updateEmployee(id: string, formData: FormData) {
-    const {employeeid,employeename, employeecity, employeesalary} = editDetails.parse({
+    const {employeeid,employeename, employeecity, employeesalary,email} = editDetails.parse({
       employeeid: formData.get("employeeid"),
       employeename: formData.get("employeename"),
       employeecity: formData.get("employeecity"),
       employeesalary: formData.get("employeesalary"),
+      email: formData.get("emailaddress")
     });
-
+    console.log(editDetails);
   try{
-    await sql `UPDATE employee SET employeeid = ${employeeid}, employeename = ${employeename}, employeecity = ${employeecity}, employeesalary = ${employeesalary} WHERE employeeid = ${employeeid};`;
+    await sql `UPDATE employee SET employeeid = ${employeeid}, employeename = ${employeename}, employeecity = ${employeecity}, employeesalary = ${employeesalary}, email = ${email}  WHERE employeeid = ${employeeid};`;
   }catch(error){
     return{
       message:'Database Error : Failed to Update Details',
@@ -104,11 +109,15 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    await signIn('credentials', Object.fromEntries(formData));
-    // revalidatePath("/dashboard/invoices");
+    await signIn('credentials', formData);
   } catch (error) {
-    if ((error as Error).message.includes('CredentialsSignin')) {
-      return 'CredentialSignin';
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
     }
     throw error;
   }

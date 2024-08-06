@@ -3,14 +3,12 @@ import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { sql } from '@vercel/postgres';
 import { z } from 'zod';
-// import type { User } froopenssl rand -base64 32m '@/app/lib/definitions';
-import bcrypt from 'bcrypt';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import type { user } from '@/app/lib/definitions';
+import bcrypt, { compare } from 'bcrypt';
  
-async function getUser(email: string) {
+async function getUser(email: string): Promise<user | undefined> {
   try {
-    const user = await sql `SELECT * from employee where employeename=${email}`;
+    const user = await sql<user>`SELECT * from employee where email=${email}`;
     return user.rows[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -24,19 +22,18 @@ export const { auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ employeename: z.string(), employeecity: z.string()})
+          .object({ email: z.string().email(), password: z.string().min(6)})
           .safeParse(credentials);
+ 
         if (parsedCredentials.success) {
-          const { employeename, employeecity } = parsedCredentials.data;
-          const user = await getUser(employeename);
+          const { email, password } = parsedCredentials.data;
+          const user = await getUser(email);
           if (!user) return null;
-          // const passwordsMatch = await bcrypt.compare(employeecity, user.employeecity);
-          
-          // if (passwordsMatch) 
-          console.log(user);
-          return user;
-          // revalidatePath("/dashboard/invoices");
-          // redirect("/dashboard/invoices");
+
+          if(password.toString() === user.password.toString()){
+            console.log(user);
+            return user;
+          }
         }
  
         console.log('Invalid credentials');

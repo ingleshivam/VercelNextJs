@@ -34,6 +34,7 @@ export default async function InvoiceTable(
                             <th className="py-3 px-2">Employee Name</th>
                             <th className="py-3 px-2">Employee City</th>
                             <th className="py-3 px-2">Employee Salary</th>
+                            <th className="py-3 px-2">Employee Email ID</th>
                             <th className="py-3 px-2">ACTION</th>
                         </tr>
                     </thead>
@@ -45,6 +46,7 @@ export default async function InvoiceTable(
                                 <td className="py-3 px-2">{data.employeename}</td>
                                 <td className="py-3 px-2">{data.employeecity}</td>
                                 <td className="py-3 px-2">{data.employeesalary}</td>
+                                <td className="py-3 px-2">{data.email}</td>
                                 <td className="py-3 px-2 flex justify-center items-center"><UpdateInvoice id={data.employeeid}/> | <DeleteDetails id={data.employeeid}/>  </td>
                             </tr>
                             )

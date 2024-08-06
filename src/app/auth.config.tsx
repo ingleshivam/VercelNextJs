@@ -1,4 +1,7 @@
+import { user } from '@nextui-org/react';
+import { request } from 'http';
 import type { NextAuthConfig } from 'next-auth';
+import { getSession } from 'next-auth/react';
  
 export const authConfig = {
   providers: [],
@@ -16,6 +19,6 @@ export const authConfig = {
         return Response.redirect(new URL('/dashboard', nextUrl));
       }
       return true;
-    },
+    },  
   },
 } satisfies NextAuthConfig;
