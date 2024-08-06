@@ -22,3 +22,30 @@ export const authConfig = {
     },  
   },
 } satisfies NextAuthConfig;
+
+
+// import { NextAuthConfig } from 'next-auth';
+
+// export const authConfig: NextAuthConfig = {
+//   providers: [],
+//   pages: {
+//     signIn: '/login',
+//     // Add any other custom pages if needed
+//   },
+//   callbacks: {
+//     async redirect({ url, baseUrl }) {
+//       // Ensure the redirection is to the base URL or a safe URL
+//       if (url.startsWith('/dashboard')) {
+//         console.log("URL : "+ url);
+//         console.log("BaseURL : "+baseUrl);
+//         return Promise.resolve(`${baseUrl}/dashboard`);
+//       }
+//       return Promise.resolve(baseUrl);
+//     },
+//     async session({ session, user }) {
+//       // You can pass additional data to the session here
+//       session.user = user;
+//       return session;
+//     },
+//   },
+// };
