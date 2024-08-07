@@ -1,0 +1,65 @@
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+// import { authConfig } from './auth.config';
+import { sql } from '@vercel/postgres';
+import { object, z } from 'zod';
+import type { user } from '@/app/lib/definitions';
+import bcrypt, { compare } from 'bcrypt';
+ 
+async function getUser(email: string): Promise<user | undefined> {
+  try {
+    const user = await sql<user>`SELECT * from employee where email=${email}`;
+    return user.rows[0];
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}
+ 
+export const { auth, signIn, signOut } = NextAuth({
+    session: {
+        strategy: "jwt",
+    },  
+  pages:{
+    signIn:"/login"
+  },
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const parsedCredentials = z
+          .object({ email: z.string().email(), password: z.string().min(6)})
+          .safeParse(credentials);
+ 
+        if (parsedCredentials.success) {
+          const { email, password } = parsedCredentials.data;
+          const user = await getUser(email);
+          if (!user) return null;
+
+          if(password.toString() === user.password.toString()){
+            // console.log(user);
+            return user;
+          }
+        }
+        console.log('Invalid credentials');
+        return null;
+        }
+    }),
+  ],
+  callbacks:{
+    async jwt({token,user}){
+        if(user){
+            token.email = user.email;
+            token.id = user.employeeid;
+        }
+        console.log("Token : "+JSON.stringify(token))
+        return token;
+    },
+    async session({ session, token }) {
+        if(token){
+            session.user.email = token.email;
+            session.user.id = token.id;
+        }
+        return session;
+    },
+  },
+});

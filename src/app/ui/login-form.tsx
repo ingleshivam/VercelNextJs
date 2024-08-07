@@ -9,10 +9,13 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '../lib/action';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
+// import { signIn } from 'next-auth/react';
+import { signIn } from '../api/auth/[...nextauth]/route';
 
 export default function LoginForm() {
   const [code, action] = useFormState(authenticate, undefined);
+
   return (
     <form action={action} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -59,7 +62,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <LoginButton />
+        <button type="submit" className='mt-5'>LOG IN</button>
         <div className="flex h-8 items-end space-x-1">
           {/* {code === 'CredentialSignin' && (
             <>
@@ -72,15 +75,5 @@ export default function LoginForm() {
         </div>
       </div>
     </form>
-  );
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus();
- 
-  return (
-    <button className="mt-4 w-full" aria-disabled={pending}>
-      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    </button>
   );
 }

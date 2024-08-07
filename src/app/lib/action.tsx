@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { UpdateInvoice } from "../components/updatedetails";
 import { error } from "console";
-import { signIn } from "../auth";
 import { AuthError } from "next-auth";
+// import { signIn } from "../auth";
+import { signIn } from "../api/auth/[...nextauth]/route";
 
 const formSchema = z.object({
   employeeid: z.string().min(1),
@@ -109,7 +110,9 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
+    // console.log(formData);
     await signIn('credentials', formData);
+    redirect('/dashboard/invoices');
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
